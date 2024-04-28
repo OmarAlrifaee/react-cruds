@@ -1,4 +1,5 @@
 import { createPortal } from "react-dom";
+import { motion } from "framer-motion";
 const CreateProduct = ({
   state,
   dispatch,
@@ -20,7 +21,13 @@ const CreateProduct = ({
     }
   };
   return createPortal(
-    <div className="container p-5 absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-slate-800 max-w-[500px] max-h-[400px]">
+    <motion.div
+      className="container p-5 absolute z-20 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-slate-800 max-w-[500px] max-h-[400px]"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      exit={{ opacity: 0 }}
+    >
       <h2 className="text-white font-extrabold md:text-4xl text-lg mx-auto text-center py-5 capitalize">
         create your product
       </h2>
@@ -82,7 +89,7 @@ const CreateProduct = ({
           cancel
         </button>
       </div>
-    </div>,
+    </motion.div>,
     document.getElementById("popup")
   );
 };

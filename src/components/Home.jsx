@@ -1,6 +1,7 @@
 import { useEffect, useReducer, useState } from "react";
 import CreateProduct from "./CreateProduct";
 import Tr from "./Tr";
+import { AnimatePresence, motion } from "framer-motion";
 const initState = {
   title: "",
   desc: "",
@@ -64,45 +65,59 @@ const Home = ({ products, setProducts }) => {
         <h1 className="md:text-[80px] text-[60px] font-bold text-white uppercase text-center mx-auto mt-5">
           cruds app
         </h1>
-        <button
-          className=" p-3 bg-blue-400 font-bold text-[30px] mt-3 rounded-xl capitalize transition-all duration-[0.3s] hover:bg-blue-950 mx-auto text-white block"
+        <motion.button
+          className=" p-3 bg-blue-400 font-bold text-[30px] mt-3 rounded-xl capitalize hover:bg-blue-950 mx-auto text-white block"
           onClick={() => setPopup(true)}
+          whileTap={{ scale: 1.2 }}
+          transition={{ delay: 0 }}
         >
           create product
-        </button>
-        {products.length > 0 && (
-          <div className="mt-12 flex md:flex-row flex-col md:gap-0 gap-3 md:justify-between justify-center items-center">
-            <input
-              type="search"
-              className="outline-none border-none focus:outline-none bg-slate-200 p-2 rounded-lg font-bold"
-              placeholder="Search By Title"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <button
-              className=" bg-red-500 hover:bg-red-950 px-3 py-2 text-white text-lg font-bold capitalize transition-all duration-[0.3s] rounded-xl"
-              onClick={() => {
-                setProducts([]);
-                setAll(0);
-              }}
-            >
-              delete all
-            </button>
-          </div>
-        )}
+        </motion.button>
+        <AnimatePresence>
+          {products?.length > 0 && (
+            <div className="mt-12 flex md:flex-row flex-col md:gap-0 gap-3 md:justify-between justify-center items-center">
+              <motion.input
+                type="search"
+                className="outline-none border-none focus:outline-none bg-slate-200 p-2 rounded-lg font-bold"
+                placeholder="Search By Title"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                whileFocus={{ width: 300 }}
+                exit={{ width: 0 }}
+                transition={{ duration: 0.3 }}
+              />
+              <motion.button
+                className=" bg-red-500 hover:bg-red-950 px-3 py-2 text-white text-lg font-bold capitalize  rounded-xl"
+                onClick={() => {
+                  setProducts([]);
+                  setAll(0);
+                }}
+                initial={{ rotate: 0 }}
+                whileHover={{ rotate: "5deg" }}
+                whileTap={{ rotate: 0, scale: 1.2 }}
+                transition={{ duration: 0.3, ease: "backInOut" }}
+                exit={{ rotate: 0, scale: 0 }}
+              >
+                delete all
+              </motion.button>
+            </div>
+          )}
+        </AnimatePresence>
         {popup && (
           <div className=" fixed top-0 left-0 w-full h-full bg-slate-900 bg-opacity-80 z-10"></div>
         )}
-        {popup && (
-          <CreateProduct
-            state={state}
-            dispatch={dispatch}
-            setPopup={setPopup}
-            setProducts={setProducts}
-            products={products}
-            setAll={setAll}
-          />
-        )}
+        <AnimatePresence>
+          {popup && (
+            <CreateProduct
+              state={state}
+              dispatch={dispatch}
+              setPopup={setPopup}
+              setProducts={setProducts}
+              products={products}
+              setAll={setAll}
+            />
+          )}
+        </AnimatePresence>
         <div className="overflow-x-auto">
           <table className="w-full mt-10 bg-white rounded-[20px]">
             <thead className="text-center">
